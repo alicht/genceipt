@@ -132,6 +132,12 @@
             
             <h3>Receipt (JSON):</h3>
             <div id="receipt" class="receipt"></div>
+            
+            <div style="margin-top: 15px;">
+                <button id="downloadBtn" onclick="downloadReceipt()" style="background-color: #28a745; font-size: 14px; padding: 8px 16px;">
+                    📄 Download Receipt
+                </button>
+            </div>
         </div>
     </div>
 
@@ -178,6 +184,9 @@
                 // Display receipt JSON (formatted)
                 receiptDiv.textContent = JSON.stringify(data, null, 2);
                 
+                // Store receipt data globally for download
+                window.currentReceipt = data;
+                
                 // Show result
                 result.style.display = 'block';
                 
@@ -190,6 +199,33 @@
                 submitBtn.textContent = 'Generate Response';
             }
         });
+
+        // Function to download receipt as JSON file
+        function downloadReceipt() {
+            if (!window.currentReceipt) {
+                alert('No receipt available to download');
+                return;
+            }
+
+            const receipt = window.currentReceipt;
+            const jsonString = JSON.stringify(receipt, null, 2);
+            
+            // Create filename with timestamp
+            const timestamp = receipt.timestamp.replace(/[:.]/g, '-').replace('Z', '');
+            const filename = `receipt_${timestamp}.json`;
+            
+            // Create blob and download
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
     </script>
 </body>
 </html>
