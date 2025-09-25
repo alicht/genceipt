@@ -2,6 +2,7 @@ import os
 import hashlib
 from datetime import datetime
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -12,6 +13,9 @@ from sqlalchemy.orm import sessionmaker, Session
 load_dotenv()
 
 app = FastAPI(title="PromptProof", version="1.0.0")
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -52,6 +56,11 @@ class GenerateResponse(BaseModel):
     prompt: str
     response: str
     hash: str
+
+
+@app.get("/")
+async def root():
+    return {"message": "PromptProof API", "frontend": "/static/index.html"}
 
 
 @app.get("/health")
