@@ -277,6 +277,96 @@ promptproof/
    docker push yourusername/promptproof:latest
    ```
 
+### Testing Your Deployment
+
+After deploying to any platform, follow these steps to verify your deployment:
+
+#### Testing on Render
+
+1. **Health Check**
+   ```
+   https://<your-service>.onrender.com/health
+   ```
+   - Expected response: `{"status": "ok"}`
+
+2. **Web Interface**
+   ```
+   https://<your-service>.onrender.com/static/index.html
+   ```
+   - Enter a test prompt like "Hello, world!"
+   - Click "Generate Response"
+   - Verify you receive an AI response with receipt
+   - Test the "Download Receipt" button
+
+3. **API Endpoints**
+   ```bash
+   # Test receipt generation
+   curl -X POST "https://<your-service>.onrender.com/generate" \
+        -H "Content-Type: application/json" \
+        -d '{"prompt": "Test prompt"}'
+   
+   # Retrieve a receipt (use the ID from previous response)
+   curl "https://<your-service>.onrender.com/receipts/1"
+   ```
+
+#### Testing on Vercel
+
+1. **Health Check**
+   ```
+   https://<your-project>.vercel.app/health
+   ```
+   - Expected response: `{"status": "ok"}`
+
+2. **Web Interface**
+   ```
+   https://<your-project>.vercel.app/static/index.html
+   ```
+   - Enter a test prompt
+   - Generate and download receipts
+   - Verify the cryptographic hash
+
+3. **API Testing**
+   ```bash
+   # Generate receipt
+   curl -X POST "https://<your-project>.vercel.app/generate" \
+        -H "Content-Type: application/json" \
+        -d '{"prompt": "Explain serverless"}'
+   ```
+
+#### Testing on Railway
+
+1. **Health Check**
+   ```
+   https://<your-app>.up.railway.app/health
+   ```
+   - Should return: `{"status": "ok"}`
+
+2. **Full Functionality Test**
+   - Navigate to: `https://<your-app>.up.railway.app/static/index.html`
+   - Generate multiple receipts
+   - Verify each receipt has a unique hash
+   - Download and verify receipts locally with `verify.py`
+
+#### Common Issues and Solutions
+
+| Issue | Solution |
+|-------|----------|
+| 500 Internal Server Error | Check if `OPENAI_API_KEY` environment variable is set |
+| "OpenAI API key not configured" | Add API key in platform's environment variables section |
+| Static files not loading | Ensure `/static` directory is included in deployment |
+| Database errors | Check write permissions for SQLite file |
+| Timeout errors | Increase timeout settings in platform configuration |
+
+#### Verification Checklist
+
+- [ ] Health endpoint returns `{"status": "ok"}`
+- [ ] Web interface loads at `/static/index.html`
+- [ ] Can generate AI response with receipt
+- [ ] Receipt includes all required fields (id, timestamp, model, prompt, response, hash)
+- [ ] Download receipt button works
+- [ ] Can retrieve stored receipts by ID
+- [ ] Downloaded receipts pass verification with `verify.py`
+
 ### Important Deployment Notes
 
 - **Environment Variables**: Never commit API keys to code. Always use environment variables
