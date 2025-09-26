@@ -185,9 +185,110 @@ promptproof/
 - **python-dotenv**: Environment variable loading
 - **Uvicorn**: ASGI server
 
+## Cloud Deployment
+
+### Deploy to Render
+
+1. **Fork/Clone Repository**
+   - Fork this repository to your GitHub account
+   - Or use your existing clone
+
+2. **Create Render Account**
+   - Sign up at [render.com](https://render.com)
+   - Connect your GitHub account
+
+3. **Create New Web Service**
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+   - Select the `promptproof` repository
+
+4. **Configure Build Settings**
+   - **Name**: `promptproof` (or your preferred name)
+   - **Environment**: `Python 3`
+   - **Build Command**: 
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - **Start Command**:
+     ```bash
+     uvicorn app.main:app --host 0.0.0.0 --port $PORT
+     ```
+
+5. **Set Environment Variables**
+   - Go to "Environment" tab in Render Dashboard
+   - Add environment variable:
+     - **Key**: `OPENAI_API_KEY`
+     - **Value**: Your OpenAI API key
+   - Click "Save Changes"
+
+6. **Deploy**
+   - Click "Create Web Service"
+   - Wait for deployment (usually 2-5 minutes)
+   - Your app will be available at: `https://[your-app-name].onrender.com`
+
+### Deploy to Railway
+
+1. **Create Railway Account**
+   - Sign up at [railway.app](https://railway.app)
+   - Connect your GitHub account
+
+2. **New Project from GitHub**
+   - Click "New Project"
+   - Select "Deploy from GitHub repo"
+   - Choose your `promptproof` repository
+
+3. **Configure Deployment**
+   - Railway will auto-detect Python
+   - **Build Command** (auto-detected):
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - **Start Command** (set manually if needed):
+     ```bash
+     uvicorn app.main:app --host 0.0.0.0 --port $PORT
+     ```
+
+4. **Set Environment Variables**
+   - Go to "Variables" tab
+   - Add variable:
+     - **OPENAI_API_KEY**: Your OpenAI API key
+   - Click "Add" to save
+
+5. **Deploy**
+   - Railway automatically deploys on push
+   - Get your public URL from Railway dashboard
+   - Format: `https://[your-app-name].up.railway.app`
+
+### Deploy with Docker
+
+1. **Build Image**
+   ```bash
+   docker build -t promptproof .
+   ```
+
+2. **Run Container**
+   ```bash
+   docker run -p 8000:8000 -e OPENAI_API_KEY=your_key_here promptproof
+   ```
+
+3. **Deploy to Docker Hub**
+   ```bash
+   docker tag promptproof:latest yourusername/promptproof:latest
+   docker push yourusername/promptproof:latest
+   ```
+
+### Important Deployment Notes
+
+- **Environment Variables**: Never commit API keys to code. Always use environment variables
+- **Database**: SQLite works for single-instance deployments. For multi-instance, consider PostgreSQL
+- **Port Configuration**: Cloud platforms provide `$PORT` environment variable
+- **Static Files**: Ensure `/static` directory is included in deployment
+- **CORS**: May need to configure for production domains
+
 ## Security Notes
 
-- Store your OpenAI API key securely in `.env`
+- Store your OpenAI API key securely in `.env` locally
+- Use environment variables in production (never commit keys)
 - The `.env` file is gitignored for security
 - Receipts use SHA256 for cryptographic integrity
 - Database uses unique constraints on hashes to prevent duplicates
