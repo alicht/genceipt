@@ -1,6 +1,22 @@
 # PromptProof 🧾
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/alicht/genceipt)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/deploy?template=https://github.com/alicht/genceipt)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/alicht/genceipt&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https://platform.openai.com/api-keys)
+
 **PromptProof** is a FastAPI application that generates cryptographically verifiable receipts for AI responses. Every AI interaction is recorded with a tamper-proof SHA256 hash, providing transparency and authenticity verification for AI-generated content.
+
+## 🎯 View Demo
+
+Try the live demo (deploy your own instance using the buttons above):
+
+| Platform | Demo URL | Status |
+|----------|----------|---------|
+| **Render** | [https://genceipt.onrender.com](https://genceipt.onrender.com) | ![Status](https://img.shields.io/badge/deploy-your_own-blue) |
+| **Vercel** | [https://genceipt.vercel.app](https://genceipt.vercel.app) | ![Status](https://img.shields.io/badge/deploy-your_own-blue) |
+| **Railway** | [https://genceipt.up.railway.app](https://genceipt.up.railway.app) | ![Status](https://img.shields.io/badge/deploy-your_own-blue) |
+
+> **Note**: Deploy your own instance to test with your OpenAI API key. Click any deployment button above to get started in minutes!
 
 ## Overview
 
